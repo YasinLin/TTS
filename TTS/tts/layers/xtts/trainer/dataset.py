@@ -102,10 +102,24 @@ class XTTSDataset(torch.utils.data.Dataset):
         # The stop token should always be sacred.
         assert not torch.any(tokens == 0), f"Stop token found in {text}"
         return tokens
+    
+    def get_phonemes(self, text, lang):
+        lang = "zh-cn" if lang == "zh" else lang
+        txt = f"[{lang}]{txt}"
+        txt = txt.replace(" ", "[SPACE]")
+        tokens = self.tokenizer.encode(txt).ids
+        tokens = torch.IntTensor(tokens)
+        assert not torch.any(tokens == 1), f"UNK token found in {text} -> {self.tokenizer.decode(tokens)}"
+        # The stop token should always be sacred.
+        assert not torch.any(tokens == 0), f"Stop token found in {text}"
+        return tokens
 
     def load_item(self, sample):
         text = str(sample["text"])
-        tseq = self.get_text(text, sample["language"])
+        if "phonemes" in sample and sample["phonemes"]) == "1":
+            tseq = self.get_phonemes(text, sample["language"])
+        else:
+            tseq = self.get_text(text, sample["language"])
         audiopath = sample["audio_file"]
         wav = load_audio(audiopath, self.sample_rate)
         if text is None or len(text.strip()) == 0:
