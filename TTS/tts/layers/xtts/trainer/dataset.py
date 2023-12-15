@@ -116,7 +116,7 @@ class XTTSDataset(torch.utils.data.Dataset):
 
     def load_item(self, sample):
         text = str(sample["text"])
-        if "phonemes" in sample and sample["phonemes"]) == "1":
+        if "phonemes" in sample and sample["phonemes"] == "1":
             tseq = self.get_phonemes(text, sample["language"])
         else:
             tseq = self.get_text(text, sample["language"])
