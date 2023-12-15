@@ -115,7 +115,6 @@ class XTTSDataset(torch.utils.data.Dataset):
         return tokens
 
     def load_item(self, sample):
-        print(sample)
         text = str(sample["text"])
         if "phonemes" in sample and sample["phonemes"] == "1":
             tseq = self.get_phonemes(text, sample["language"])
@@ -123,6 +122,7 @@ class XTTSDataset(torch.utils.data.Dataset):
             tseq = self.get_text(text, sample["language"])
         audiopath = sample["audio_file"]
         wav = load_audio(audiopath, self.sample_rate)
+        print(tseq,wav.shape)
         if text is None or len(text.strip()) == 0:
             raise ValueError
         if wav is None or wav.shape[-1] < (0.5 * self.sample_rate):
