@@ -122,6 +122,7 @@ class XTTSDataset(torch.utils.data.Dataset):
             tseq = self.get_text(text, sample["language"])
         audiopath = sample["audio_file"]
         wav = load_audio(audiopath, self.sample_rate)
+        print(wav.shape, tseq)
         if text is None or len(text.strip()) == 0:
             raise ValueError
         if wav is None or wav.shape[-1] < (0.5 * self.sample_rate):
