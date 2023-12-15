@@ -105,7 +105,7 @@ class XTTSDataset(torch.utils.data.Dataset):
     
     def get_phonemes(self, text, lang):
         lang = "zh-cn" if lang == "zh" else lang
-        txt = f"[{lang}]{txt}"
+        txt = f"[{lang}]{text}"
         txt = txt.replace(" ", "[SPACE]")
         tokens = self.tokenizer.encode(txt).ids
         tokens = torch.IntTensor(tokens)
@@ -122,7 +122,6 @@ class XTTSDataset(torch.utils.data.Dataset):
             tseq = self.get_text(text, sample["language"])
         audiopath = sample["audio_file"]
         wav = load_audio(audiopath, self.sample_rate)
-        print(tseq,wav.shape)
         if text is None or len(text.strip()) == 0:
             raise ValueError
         if wav is None or wav.shape[-1] < (0.5 * self.sample_rate):
